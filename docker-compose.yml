@@ -1,0 +1,33 @@
+version: '3.4'
+
+services:
+  microservice.sendemail.api:
+    image: ${DOCKER_REGISTRY-}microservicesendemailapi
+    build:
+      context: .
+      dockerfile: MicroService.SendEmail.API/Dockerfile
+    depends_on:
+     - sqlserver
+    networks:
+        microservice.sendemail.networks:
+
+  sqlserver:
+    user: root
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+        - "1433:1433"
+    environment:
+        SA_PASSWORD: "YourStrong!Passw0rd"
+        ACCEPT_EULA: "Y"
+        MSSQL_PID: "Developer"
+    volumes:
+        - ../volumes:/var/opt/mssql/data
+    networks:
+       microservice.sendemail.networks:
+            aliases:
+                - "sql"
+volumes:
+    microservice.sendemail.volumes:
+networks:
+    microservice.sendemail.networks:
+        driver: bridge
