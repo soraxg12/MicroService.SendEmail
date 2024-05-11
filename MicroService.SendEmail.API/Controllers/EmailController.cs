@@ -19,16 +19,16 @@ namespace MicroService.SendEmail.API.Controllers
 
         // GET: api/<EmailController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<Email> Get()
         {
-            return new string[] { "value1", "value2" };
+            return baseService.GetAll();
         }
 
         // GET api/<EmailController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public Email Get(int id)
         {
-            return "value";
+            return baseService.GetById(id);
         }
 
         // POST api/<EmailController>
@@ -41,14 +41,19 @@ namespace MicroService.SendEmail.API.Controllers
 
         // PUT api/<EmailController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Put(int id, [FromBody] Email email)
         {
+            email.Id = id;
+            baseService.Update(email);
+            baseService.Save();
         }
 
         // DELETE api/<EmailController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
+            baseService.Delete(id);
+            baseService.Save();
         }
     }
 }
